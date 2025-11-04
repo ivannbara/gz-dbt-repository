@@ -48,9 +48,7 @@ sources:
           - name: ship_cost
             description: Coût d’expédition converti en entier (INT).
 
-/
 
-version: 2
 models:
   - name: int_orders_margin
     description: Calcule les marges par commande en combinant les revenus, les coûts d’achat et les quantités vendues.
