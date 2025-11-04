@@ -1,12 +1,49 @@
 version: 2
-sources: 
+sources:
   - name: raw
     schema: gz_raw_data
-    tables: 
+    tables:
       - name: sales
         identifier: raw_gz_sales
+        description: Table contenant les données de ventes, incluant les dates, identifiants de commande, produits, revenus et quantités.
+        columns:
+          - name: date_date
+            description: Date de la transaction de vente.
+          - name: orders_id
+            description: Identifiant unique de la commande.
+          - name: pdt_id
+            description: Identifiant du produit vendu.
+          - name: revenue
+            description: Montant généré par la vente.
+          - name: quantity
+            description: Quantité vendue.
+        tests:
+          - unique:
+              column_name: orders_id || '-' || pdt_id
       - name: product
         identifier: raw_gz_product
+        description: Table listant les produits disponibles avec leur identifiant et prix d’achat.
+        columns:
+          - name: products_id
+            description: Identifiant unique du produit.
+            tests: 
+            - unique
+            - not_null
+          - name: purchase_price
+            description: Prix d’achat du produit, converti en FLOAT64.
+
       - name: ship
         identifier: raw_gz_ship
-  
+        description: Table contenant les informations d’expédition des commandes, incluant les frais et coûts logistiques.
+        columns:
+          - name: orders_id
+            description: Identifiant de la commande associée à l’expédition.
+            tests: 
+            - unique
+            - not_null
+          - name: shipping_fee
+            description: Frais d’expédition facturés au client.
+          - name: logcost
+            description: Coût logistique associé à l’expédition.
+          - name: ship_cost
+            description: Coût d’expédition converti en entier (INT).
