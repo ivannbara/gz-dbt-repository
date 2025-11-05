@@ -1,0 +1,151 @@
+version: 2
+sources:
+  - name: raw
+    schema: gz_raw_data
+    tables:
+      - name: sales
+        identifier: raw_gz_sales
+        description: Table contenant les données de ventes, incluant les dates, identifiants de commande, produits, revenus et quantités.
+        columns:
+          - name: date_date
+            description: Date de la transaction de vente.
+          - name: orders_id
+            description: Identifiant unique de la commande.
+          - name: pdt_id
+            description: Identifiant du produit vendu.
+          - name: revenue
+            description: Montant généré par la vente.
+          - name: quantity
+            description: Quantité vendue.
+        tests:
+          - unique:
+              column_name: orders_id || '-' || pdt_id
+      - name: product
+        identifier: raw_gz_product
+        description: Table listant les produits disponibles avec leur identifiant et prix d’achat.
+        columns:
+          - name: products_id
+            description: Identifiant unique du produit.
+            tests: 
+            - unique
+            - not_null
+          - name: purchase_price
+            description: Prix d’achat du produit, converti en FLOAT64.
+
+      - name: ship
+        identifier: raw_gz_ship
+        description: Table contenant les informations d’expédition des commandes, incluant les frais et coûts logistiques.
+        columns:
+          - name: orders_id
+            description: Identifiant de la commande associée à l’expédition.
+            tests: 
+            - unique
+            - not_null
+          - name: shipping_fee
+            description: Frais d’expédition facturés au client.
+          - name: logcost
+            description: Coût logistique associé à l’expédition.
+          - name: ship_cost
+            description: Coût d’expédition converti en entier (INT).
+
+
+models:
+  - name: int_orders_margin
+    description: Calcule les marges par commande en combinant les revenus, les coûts d’achat et les quantités vendues.
+    columns:
+      - name: orders_id
+        description: Identifiant unique de la commande.
+        tests:
+          - not_null
+          - unique
+      - name: revenue
+        description: Montant total généré par la commande.
+        tests:
+          - not_null
+      - name: purchase_cost
+        description: Coût total d’achat des produits dans la commande.
+        tests:
+          - not_null
+      - name: quantity
+        description: Quantité totale de produits vendus dans la commande.
+        tests:
+          - not_null
+      - name: margin
+        description: Différence entre le revenu et le coût d’achat.
+
+  - name: int_orders_operational
+    description: Agrège les coûts opérationnels par commande, incluant les frais d’expédition et les coûts logistiques.
+    columns:
+      - name: orders_id
+        description: Identifiant unique de la commande.
+        tests:
+          - not_null
+          - unique
+      - name: shipping_fee
+        description: Frais d’expédition facturés au client.
+        tests:
+          - not_null
+      - name: logcost
+        description: Coût logistique associé à la commande.
+        tests:
+          - not_null
+      - name: operational_margin
+        description: Marge opérationnelle calculée à partir des revenus et des coûts logistiques.
+
+
+  - name: int_sales_margin
+    description: Calcule le coût d’achat et la marge par ligne de vente en joignant les ventes aux produits.
+    columns:
+      - name: orders_id
+        description: Identifiant unique de la commande.
+        tests:
+          - not_null
+      - name: pdt_id
+        description: Identifiant du produit vendu.
+        tests:
+          - not_null
+      - name: quantity
+        description: Quantité vendue pour ce produit.
+        tests:
+          - not_null
+      - name: revenue
+        description: Montant généré par la vente.
+        tests:
+          - not_null
+      - name: purchase_price
+        description: Prix d’achat unitaire du produit.
+        tests:
+          - not_null
+      - name: purchase_cost
+        description: Coût total d’achat calculé comme purchase_price × quantity.
+      - name: margin
+        description: Marge calculée comme revenue − purchase_cost, arrondie à deux décimales.
+
+  - name: finance_days
+    description: Vue journalière agrégée des indicateurs financiers, combinant les marges commerciales et opérationnelles.
+    columns:
+      - name: date_date
+        description: Date de la transaction.
+        tests:
+          - not_null
+          - unique
+      - name: nb_transactions
+        description: Nombre de commandes distinctes passées ce jour-là.
+        tests:
+          - not_null
+      - name: revenue
+        description: Revenu total généré ce jour-là.
+        tests:
+          - not_null
+      - name: average_basket
+        description: Revenu moyen par commande.
+      - name: purchase_cost
+        description: Coût total des produits achetés ce jour-là.
+      - name: quantity
+        description: Quantité totale de produits vendus ce jour-là.
+      - name: operational_margin
+        description: Marge opérationnelle agrégée par jour.
+      - name: shipping_fee
+        description: Total des frais d’expédition facturés.
+      - name: log_cost
+        description: Total des coûts logistiques.
