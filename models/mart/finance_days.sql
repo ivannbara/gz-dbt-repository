@@ -1,3 +1,4 @@
+{{ config(materialized='table' }}
 with om as (
     select 
         date_date,
@@ -32,3 +33,4 @@ select
     quantity 
 from om
 left join oo using(date_date)
+
