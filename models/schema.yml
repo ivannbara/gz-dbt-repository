@@ -254,3 +254,37 @@ models:
         description: Total des frais d’expédition facturés.
       - name: log_cost
         description: Total des coûts logistiques.
+
+  - name: int_ads_margin
+    description: Combine les données de campagnes publicitaires et les indicateurs financiers journaliers pour calculer la marge publicitaire.
+    config:
+      materialized: view
+    columns:
+      - name: date_date
+        description: Date de la campagne et des indicateurs financiers.
+        tests:
+          - not_null
+          - unique
+      - name: ads_margin
+        description: Marge publicitaire calculée comme operational_margin − ads_cost.
+      - name: average_basket
+        description: Revenu moyen par commande ce jour-là.
+      - name: operational_margin
+        description: Marge opérationnelle totale ce jour-là.
+      - name: ads_cost
+        description: Coût total des campagnes publicitaires ce jour-là.
+      - name: ads_impression
+        description: Nombre d’impressions publicitaires enregistrées.
+      - name: ads_click
+        description: Nombre de clics sur les publicités.
+      - name: quantity
+        description: Quantité totale de produits vendus ce jour-là.
+      - name: revenue
+        description: Revenu total généré ce jour-là.
+      - name: purchase_cost
+        description: Coût total des produits achetés ce jour-là.
+      - name: shipping_fee
+        description: Total des frais d’expédition facturés.
+      - name: log_cost
+        description: Total des coûts logistiques.
+
