@@ -23,6 +23,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 # Configuration des modèles
 models:
-  gz-dbt-repository:  # correspond au dossier racine dans /models/
+  my_new_project:  # correspond au dossier racine dans /models/
     mart:          # sous-dossier spécifique
       +materialized: table  # tous les modèles dans models/my_new_project/mart/ seront des tables
+      finance :
+        +schema : finance
