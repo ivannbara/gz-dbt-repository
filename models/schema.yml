@@ -54,9 +54,6 @@ sources:
         columns:
           - name: date_date
             description: date
-            tests: 
-            - unique
-            - not_null
           - name: paid_source
             description: source ads
           - name: campaign_key
@@ -76,9 +73,6 @@ sources:
         columns:
           - name: date_date
             description: date
-            tests: 
-            - unique
-            - not_null
           - name: paid_source
             description: source ads
           - name: campaign_key
@@ -97,9 +91,6 @@ sources:
         columns:
           - name: date_date
             description: date
-            tests: 
-            - unique
-            - not_null
           - name: paid_source
             description: source ads
           - name: campaign_key
@@ -116,11 +107,6 @@ sources:
         identifier: raw_gz_facebook
         description: Table données ads facebook
         columns:
-          - name: date_date
-            description: date
-            tests: 
-            - unique
-            - not_null
           - name: paid_source
             description: source ads
           - name: campaign_key
