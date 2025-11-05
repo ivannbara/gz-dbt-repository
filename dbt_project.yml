@@ -36,6 +36,5 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 
 models:
-  greenweez_project:  # correspond au dossier racine dans /models/
-    mart:  # sous-dossier spécifique
+  mart:  # sous-dossier spécifique
       +materialized: table  # tous les modèles dans models/mart/ seront des tables
