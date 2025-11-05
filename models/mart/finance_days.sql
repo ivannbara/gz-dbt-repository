@@ -1,4 +1,4 @@
-{{ config(materialized='table' }}
+{{ config(materialized='table' )}}
 with om as (
     select 
         date_date,
