@@ -190,6 +190,7 @@ models:
         description: Coût total d’achat calculé comme purchase_price × quantity.
       - name: margin
         description: Marge calculée comme revenue − purchase_cost, arrondie à deux décimales.
+
   - name: int_campaigns
     columns:
       - name: date_date
@@ -208,6 +209,23 @@ models:
     tests:
       - unique:
           column_name: date_date || '-' || campaign_key
+
+  - name: int_campaigns_day
+    columns:
+      - name: date_date
+        description: date
+      - name: paid_source
+        description: source ads
+      - name: campaign_key
+        description: campagne key
+      - name: camPGN_name
+        description: campagne nom
+      - name: ads_cost
+        description: cout ads
+      - name: impression
+        description: n impression
+      - name: click
+
   - name: finance_days
     description: Vue journalière agrégée des indicateurs financiers, combinant les marges commerciales et opérationnelles.
     columns:
